@@ -1,0 +1,27 @@
+App\Entity\User:
+  constraints:
+    - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
+        fields: username
+        message: user.username.unique
+    - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
+        fields: email
+        message: user.email.unique
+  properties:
+    username:
+      - NotBlank: ~
+      - Length:
+          min: 3
+          max: 80
+    password:
+      - Length:
+          min: 8
+    plainPassword:
+      - NotBlank: ~
+      - Length:
+          min: 8
+    email:
+      - NotBlank: ~
+      - Email:
+          checkMX: true
+    createdAt:
+      - DateTime: ~
