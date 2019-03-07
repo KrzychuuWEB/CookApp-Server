@@ -57,6 +57,14 @@ class User implements UserInterface, \Serializable
         $this->isActive = true;
     }
 
+    public function setId(int $id): self
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+
     public function getId(): ?int
     {
         return $this->id;

@@ -44,4 +44,19 @@ class UserController extends AbstractFOSRestController
             'error_fields' => $converter->convertErrorsFromFrom($form),
         ], Response::HTTP_BAD_REQUEST);
     }
+
+    /**
+     * @Rest\Get("/users/{id}", name="user_getOne")
+     *
+     * @param int $id
+     * @param UserService $userService
+     *
+     * @return Response
+     */
+    public function getOneUser(int $id, UserService $userService): Response
+    {
+        return $this->json([
+            "user" => $userService->getUserById($id),
+        ], 200);
+    }
 }
