@@ -70,39 +70,20 @@ class UserServiceTest extends TestCase
         $this->assertEquals("ExampleUsername", $result);
     }
 
-    /**
-     * @dataProvider getOneUserByIdDataProvider
-     *
-     * @param $id
-     * @param $user
-     * @param $expected
-     */
-    public function testGetUserById($id, $user, $expected)
+    public function testGetUserByUsername()
     {
+        $user = new User();
+
         $this->userRepository
             ->expects($this->any())
-            ->method('find')
-            ->with($id)
+            ->method('findOneBy')
+            ->with([
+                'username' => 'Admin',
+            ])
             ->willReturn($user);
 
-        $result = $this->userService->getUserById($id);
+        $result = $this->userService->getUserByUsername("Admin");
 
-        $this->assertEquals($expected, $result);
-    }
-
-    public function getOneUserByIdDataProvider()
-    {
-        $id0 = 0;
-        $user0 = new User();
-        $expected0 = $user0;
-
-        $id1 = 1;
-        $user1 = new User();
-        $expected1 = $user1;
-
-        return [
-          [$id0, $user0, $expected0],
-          [$id1, $user1, $expected1],
-        ];
+        $this->assertEquals($user, $result);
     }
 }

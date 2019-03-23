@@ -52,11 +52,13 @@ class UserService
     }
 
     /**
-     * @param int $id
-     * @return User
+     * @param string $username
+     * @return User|null
      */
-    public function getUserById(int $id)
+    public function getUserByUsername(string $username)
     {
-        return $this->userRepository->find($id);
+        return $this->userRepository->findOneBy([
+            'username' => $username,
+        ]);
     }
 }

@@ -46,17 +46,25 @@ class UserController extends AbstractFOSRestController
     }
 
     /**
-     * @Rest\Get("/users/{id}", name="user_getOne")
+     * @Rest\Get("/users/{username}", name="user_getOneByUsername")
      *
-     * @param int $id
+     * @param string $username
      * @param UserService $userService
      *
      * @return Response
      */
-    public function getOneUser(int $id, UserService $userService): Response
+    public function getOneUserByUsername(string $username, UserService $userService): Response
     {
+        $user = $userService->getUserByUsername($username);
+
+        if ($user) {
+            return $this->json([
+                "user" => $user,
+            ], Response::HTTP_OK);
+        }
+
         return $this->json([
-            "user" => $userService->getUserById($id),
-        ], 200);
+            "error" => "User $username not found",
+        ], Response::HTTP_BAD_REQUEST);
     }
 }
