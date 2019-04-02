@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as Serializer;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -51,6 +52,13 @@ class User implements UserInterface, \Serializable
      * @var string
      */
     private $plainPassword;
+
+    /**
+     * @Serializer\MaxDepth(1)
+     * @ORM\OneToOne(targetEntity="App\Entity\Accounts", inversedBy="user", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $account;
 
     public function __construct()
     {
@@ -173,5 +181,17 @@ class User implements UserInterface, \Serializable
             $this->username,
             $this->password,
             ) = unserialize($serialized, array('allowed_classes' => false));
+    }
+
+    public function getAccount(): ?Accounts
+    {
+        return $this->account;
+    }
+
+    public function setAccount(Accounts $account): self
+    {
+        $this->account = $account;
+
+        return $this;
     }
 }
