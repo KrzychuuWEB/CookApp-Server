@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -142,6 +144,11 @@ class User implements UserInterface, \Serializable
     public function setCreatedAt()
     {
         $this->createdAt = new \DateTime();
+    }
+
+    public function getCreatedAt(): ?\DateTime
+    {
+        return $this->createdAt;
     }
 
     public function getPlainPassword(): ?string

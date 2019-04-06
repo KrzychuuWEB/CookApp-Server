@@ -6,7 +6,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
-class LocaleSubscriber implements EventSubscriberInterface
+class LanguageSubscriber implements EventSubscriberInterface
 {
     private $defaultLocale;
 

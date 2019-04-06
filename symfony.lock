@@ -227,6 +227,9 @@
     "symfony/event-dispatcher": {
         "version": "v4.2.2"
     },
+    "symfony/expression-language": {
+        "version": "v4.2.5"
+    },
     "symfony/filesystem": {
         "version": "v4.2.2"
     },

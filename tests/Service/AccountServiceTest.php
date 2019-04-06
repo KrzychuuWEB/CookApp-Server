@@ -49,6 +49,12 @@ class AccountServiceTest extends TestCase
     {
         $account = new Accounts();
         $account->setFirstName("-");
+        $account->setLastName("-");
+        $account->setAge(0);
+        $account->setHobby("-");
+        $account->setCountry("-");
+        $account->setCity("-");
+        $account->setAboutMe("-");
 
         $result = $this->accountService->returnNewAccountWithDefaultValues();
 

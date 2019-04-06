@@ -35,6 +35,12 @@ class AccountService
     {
         $account = new Accounts();
         $account->setFirstName("-");
+        $account->setLastName("-");
+        $account->setAge(0);
+        $account->setHobby("-");
+        $account->setCountry("-");
+        $account->setCity("-");
+        $account->setAboutMe("-");
 
         return $account;
     }
@@ -56,6 +62,12 @@ class AccountService
         }
 
         $account->setFirstName($data->getFirstName());
+        $account->setLastName($data->getLastName());
+        $account->setAge($data->getAge());
+        $account->setHobby($data->getHobby());
+        $account->setCountry($data->getCountry());
+        $account->setCity($data->getCity());
+        $account->setAboutMe($data->getAboutMe());
 
         $this->entityManager->flush();
 
