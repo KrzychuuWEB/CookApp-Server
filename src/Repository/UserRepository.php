@@ -18,4 +18,22 @@ class UserRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, User::class);
     }
+
+    /**
+     * @param string $username
+     * @return User|null
+     *
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function findUserByUsernameAndReturnOnlyActiveUser(string $username): ?User
+    {
+        $result = $this->createQueryBuilder('u')
+            ->andWhere('u.username = :username')
+            ->andWhere('u.isActive = 1')
+            ->setParameter('username', $username)
+            ->getQuery();
+        $result->execute();
+
+        return $result->setMaxResults(1)->getOneOrNullResult();
+    }
 }

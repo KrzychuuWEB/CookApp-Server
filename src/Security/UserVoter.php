@@ -8,10 +8,12 @@ use App\Entity\User;
 use App\Service\UserService;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
+use Symfony\Component\Security\Core\Security;
 
-class AccountVoter extends Voter
+class UserVoter extends Voter
 {
-    const ACCOUNT_EDIT = 'ACCOUNT_EDIT';
+    const USER_EDIT = 'USER_EDIT';
+    const USER_DELETE = 'USER_DELETE';
 
     /**
      * @var UserService $userService
@@ -19,12 +21,22 @@ class AccountVoter extends Voter
     private $userService;
 
     /**
-     * AccountVoter constructor.
-     * @param UserService $userService
+     * @var Security
      */
-    public function __construct(UserService $userService)
-    {
+    private $security;
+
+    /**
+     * AccountVoter constructor.
+     *
+     * @param UserService $userService
+     * @param \Security $security
+     */
+    public function __construct(
+        UserService $userService,
+        Security $security
+    ) {
         $this->userService = $userService;
+        $this->security = $security;
     }
 
     /**
@@ -35,7 +47,7 @@ class AccountVoter extends Voter
      */
     protected function supports($attribute, $subject): bool
     {
-        if (!in_array($attribute, [self::ACCOUNT_EDIT])) {
+        if (!in_array($attribute, [self::USER_EDIT, self::USER_DELETE])) {
             return false;
         }
 
@@ -46,6 +58,8 @@ class AccountVoter extends Voter
      * @param string $attribute
      * @param mixed $subject
      * @param TokenInterface $token
+     *
+     * @throws \Doctrine\ORM\NonUniqueResultException
      *
      * @return bool
      */
@@ -60,8 +74,10 @@ class AccountVoter extends Voter
         $username = $subject;
 
         switch ($attribute) {
-            case self::ACCOUNT_EDIT:
+            case self::USER_EDIT:
                 return $this->canEdit($username, $user);
+            case self::USER_DELETE:
+                return $this->canDelete();
         }
 
         throw new \LogicException("This code should not be reached!");
@@ -70,6 +86,8 @@ class AccountVoter extends Voter
     /**
      * @param $username
      * @param $user
+     *
+     * @throws \Doctrine\ORM\NonUniqueResultException
      *
      * @return bool
      */
@@ -83,7 +101,21 @@ class AccountVoter extends Voter
     }
 
     /**
+     * @return bool
+     */
+    private function canDelete(): bool
+    {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
      * @param $username
+     *
+     * @throws \Doctrine\ORM\NonUniqueResultException
      *
      * @return User|null
      */

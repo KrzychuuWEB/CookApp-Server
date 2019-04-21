@@ -1,1 +1,12 @@
-no.have.access: Nie masz dostępu do tego zasobu!
+form_is_not_valid: W formularzu wystąpił błąd
+
+# UserController
+user_%username%_not_found: Użytkownik %username% nie został znaleziony
+old_password_not_correct: Stare hasło jest nieprawidłowe
+password_update: Hasło zostało zaktualizowane
+create_user_account: Konto zostało zarejestrowane
+user_delete: Użytkownik został usunięty
+
+# AccountController
+account_update: Konto zostało zaktualizowane
+account_not_found: Konto nie zostało znalezione

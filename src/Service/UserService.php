@@ -7,6 +7,7 @@ namespace App\Service;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\NonUniqueResultException;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class UserService
@@ -51,7 +52,7 @@ class UserService
 
         $user->setAccount($account);
         $user->setPassword(
-            $this->passwordEncoder->encodePassword($user, $user->getPlainPassword())
+            $this->encodeUserPassword($user, $user->getPlainPassword())
         );
 
         $this->entityManager->persist($account);
@@ -63,12 +64,69 @@ class UserService
 
     /**
      * @param string $username
+     *
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     *
      * @return User|null
+     *
      */
     public function getUserByUsername(string $username): ?User
     {
-        return $this->userRepository->findOneBy([
-            'username' => $username,
-        ]);
+        $user = $this->userRepository->findUserByUsernameAndReturnOnlyActiveUser($username);
+
+        if (count([$user]) > 1) {
+            throw new NonUniqueResultException();
+        }
+
+        return $user;
+    }
+
+    public function deleteUser(User $user): bool
+    {
+        $user->setIsActive(false);
+
+        $this->entityManager->flush();
+
+        return true;
+    }
+
+    /**
+     * @param array $payload
+     * @param User $user
+     *
+     * @return bool|null
+     */
+    public function changePassword(array $payload, User $user): ?bool
+    {
+        if (!$this->validUserPassword($user, $payload['oldPassword'])) {
+            return null;
+        }
+
+        $user->setPassword($this->encodeUserPassword($user, $payload['password']));
+        $this->entityManager->flush();
+
+        return true;
+    }
+
+    /**
+     * @param User $user
+     * @param string $oldPassword
+     *
+     * @return bool|null
+     */
+    private function validUserPassword(User $user, string $oldPassword): ?bool
+    {
+        return $this->passwordEncoder->isPasswordValid($user, $oldPassword);
+    }
+
+    /**
+     * @param User $user
+     * @param string $password
+     *
+     * @return string|null
+     */
+    private function encodeUserPassword(User $user, string $password): ?string
+    {
+        return $this->passwordEncoder->encodePassword($user, $password);
     }
 }

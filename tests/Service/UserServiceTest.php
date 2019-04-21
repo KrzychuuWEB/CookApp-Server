@@ -21,13 +21,13 @@ class UserServiceTest extends TestCase
     /** @var UserRepository|\PHPUnit_Framework_MockObject_MockObject */
     private $userRepository;
 
-    /** @var UserPasswordEncoderInterface */
+    /** @var UserPasswordEncoderInterface|\PHPUnit_Framework_MockObject_MockObject */
     private $passwordEncoder;
 
     /** @var UserService */
     private $userService;
 
-    /** @var AccountService */
+    /** @var AccountService|\PHPUnit_Framework_MockObject_MockObject */
     private $accountService;
 
     protected function setUp()
@@ -38,9 +38,13 @@ class UserServiceTest extends TestCase
         $this->userRepository = $this->getMockBuilder(UserRepository::class)
             ->disableOriginalConstructor()
             ->getMock();
+
         $this->passwordEncoder = $this->createMock(UserPasswordEncoderInterface::class);
         $this->passwordEncoder->method('encodePassword')
             ->willReturn("ExamplePassword");
+        $this->passwordEncoder->method('isPasswordValid')
+            ->willReturn(true);
+
         $this->accountService = $this->getMockBuilder(AccountService::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -56,7 +60,10 @@ class UserServiceTest extends TestCase
     protected function tearDown()
     {
         $this->entityManagerInterface = null;
+        $this->userRepository = null;
         $this->passwordEncoder = null;
+        $this->accountService = null;
+        $this->userService = null;
     }
 
     public function testCreateUser()
@@ -92,20 +99,65 @@ class UserServiceTest extends TestCase
         $this->assertEquals("ExampleUsername", $result);
     }
 
+    /**
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
     public function testGetUserByUsername()
     {
         $user = new User();
 
         $this->userRepository
-            ->expects($this->any())
-            ->method('findOneBy')
-            ->with([
-                'username' => 'Admin',
-            ])
+            ->expects($this->once())
+            ->method('findUserByUsernameAndReturnOnlyActiveUser')
+            ->with("ExampleUsername")
             ->willReturn($user);
 
-        $result = $this->userService->getUserByUsername("Admin");
+        $result = $this->userService->getUserByUsername("ExampleUsername");
 
         $this->assertEquals($user, $result);
+    }
+
+    /**
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function testGetUserByUsernameWithBadUsername()
+    {
+        $this->userRepository
+            ->expects($this->once())
+            ->method('findUserByUsernameAndReturnOnlyActiveUser')
+            ->with("ExampleBadUsername")
+            ->willReturn(null);
+
+        $result = $this->userService->getUserByUsername("ExampleBadUsername");
+
+        $this->assertNull($result);
+    }
+
+    public function testChangeUserPassword()
+    {
+        $user = new User();
+        $user->setPassword("ExampleOldPassword");
+
+        $result = $this->userService->changePassword([
+            'password' => 'ExampleNewPassword',
+            'oldPassword' => 'ExampleOldPassword'
+        ], $user);
+
+        $this->assertTrue($result);
+    }
+
+    public function testDeleteUser()
+    {
+        $user = new User();
+        $user->setIsActive(true);
+
+        $user->setIsActive(false);
+        $this->entityManagerInterface
+            ->expects($this->once())
+            ->method('flush');
+
+        $result = $this->userService->deleteUser($user);
+
+        $this->assertTrue($result);
     }
 }
