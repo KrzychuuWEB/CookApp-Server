@@ -94,7 +94,12 @@ class UserVoter extends Voter
     private function canEdit($username, $user): bool
     {
         if ($this->checkUserByUsername($username)) {
-            return strtolower($user->getUsername()) === strtolower($username);
+            if (strtolower($user->getUsername()) === strtolower($username) || $this->security->isGranted('ROLE_ADMIN')
+            ) {
+                return true;
+            } else {
+                return false;
+            }
         } else {
             return false;
         }
