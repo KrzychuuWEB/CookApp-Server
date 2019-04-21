@@ -61,13 +61,15 @@ class UserController extends AbstractFOSRestController
      *
      * @return Response
      */
-    public function register(Request $request): Response
+    public function createUser(Request $request): Response
     {
         $form = $this->createForm(UserType::class, null);
         $form->submit($request->request->all());
 
         if ($form->isValid()) {
             $data = $form->getData();
+
+            $this->userService->createUser($data);
 
             return $this->json([
                 'success' => $this->translator->trans('create_user_account'),
