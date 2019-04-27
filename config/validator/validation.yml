@@ -25,3 +25,10 @@ App\Entity\User:
           checkMX: true
     createdAt:
       - DateTime: ~
+
+App\Entity\Permission:
+  properties:
+    name:
+      - NotBlank: ~
+      - App\Validator\Constraints\ConstraintsPermissionUnique: { groups: [create], message: permission.name.unique }
+      - App\Validator\Constraints\ConstraintsPermissionNotFound: { groups: [delete], message: permission.not.found }

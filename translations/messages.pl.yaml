@@ -10,3 +10,14 @@ user_delete: Użytkownik został usunięty
 # AccountController
 account_update: Konto zostało zaktualizowane
 account_not_found: Konto nie zostało znalezione
+
+# PermissionController
+permission_not_found: Uprawnienie nie zostało znalezione
+user_has_permission: Użytkownik posiada już to uprawnienie
+user_not_has_permission: Użytkownik nie posiada tego uprawnienia
+user_delete_permission: Uprawnienie zostało usunięte dla użytkownika
+user_add_permission: Użytkownik otrzymał uprawnienie
+permission_delete: Uprawnienie zostało usunięte
+permission_created: Uprawnienie zostało dodane
+permission_delete_has_users: Nie możesz usunąć uprawnienia, ponieważ jakiś użytkownik posiada te uprawnienie
+permission_update: Uprawnienie zostało zaktualizowane

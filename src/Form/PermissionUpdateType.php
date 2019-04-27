@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace App\Form;
 
-use App\Entity\Accounts;
+use App\Entity\Permission;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class AccountType extends AbstractType
+class PermissionUpdateType extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
@@ -20,13 +19,7 @@ class AccountType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('firstName', TextType::class)
-            ->add('lastName', TextType::class)
-            ->add('age', NumberType::class)
-            ->add('hobby', TextType::class)
-            ->add('country', TextType::class)
-            ->add('city', TextType::class)
-            ->add('aboutMe', TextType::class)
+            ->add('name', TextType::class)
         ;
     }
 
@@ -36,7 +29,7 @@ class AccountType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Accounts::class
+            'data_class' => Permission::class
         ]);
     }
 }

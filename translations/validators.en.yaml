@@ -1,3 +1,7 @@
-# UserService Entity Validation
+# User Entity Validation
 user.username.unique: This value is already used.
 user.email.unique: This value is already used.
+
+# Permission Entity Validation
+permission.name.unique: This value is already used
+permission.not.found: This permission is not found

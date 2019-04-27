@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as Serializer;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -62,9 +64,15 @@ class User implements UserInterface, \Serializable
      */
     private $account;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Permission", mappedBy="user")
+     */
+    private $permissions;
+
     public function __construct()
     {
         $this->isActive = true;
+        $this->permissions = new ArrayCollection();
     }
 
     public function setId(int $id): self
@@ -135,7 +143,14 @@ class User implements UserInterface, \Serializable
 
     public function getRoles()
     {
-        return array('ROLE_USER');
+        $roles = ['ROLE_USER'];
+
+        $permissions = $this->getPermissions();
+        foreach ($permissions as $permission) {
+            $roles[] = $permission->getName();
+        }
+
+        return $roles;
     }
 
     /**
@@ -198,6 +213,34 @@ class User implements UserInterface, \Serializable
     public function setAccount(Accounts $account): self
     {
         $this->account = $account;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Permission[]
+     */
+    public function getPermissions(): Collection
+    {
+        return $this->permissions;
+    }
+
+    public function addPermission(Permission $permission): self
+    {
+        if (!$this->permissions->contains($permission)) {
+            $this->permissions[] = $permission;
+            $permission->addUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removePermission(Permission $permission): self
+    {
+        if ($this->permissions->contains($permission)) {
+            $this->permissions->removeElement($permission);
+            $permission->removeUser($this);
+        }
 
         return $this;
     }

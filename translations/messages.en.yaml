@@ -10,3 +10,14 @@ user_delete: The user has been deleted
 # AccountController
 account_update: The account has been updated
 account_not_found: The account not found
+
+# PermissionController
+permission_not_found: The permission is not found
+user_has_permission: The user has this permission
+user_not_has_permission: The user not has been this permission
+user_delete_permission: The permission has been deleted for the user
+user_add_permission: The user has been given permission
+permission_delete: The permission has benn deleted
+permission_created: The permission has benn created
+permission_delete_has_users: The permission is not delete, because the users has been this permission
+permission_update: The permission has been updated

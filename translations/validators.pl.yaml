@@ -1,3 +1,7 @@
-# UserService Entity Validation
+# User Entity Validation
 user.username.unique: Taki użytkownik juz istnieje!
 user.email.unique: Ten email ma już przypisane konto!
+
+# Permission Entity Validation
+permission.name.unique: Takie uprawnienie już istnieje
+permission.not.found: Takie uprawnienie nie istnieje

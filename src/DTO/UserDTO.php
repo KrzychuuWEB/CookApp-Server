@@ -58,11 +58,22 @@ class UserDTO
      */
     private $aboutMe;
 
+    /**
+     * @var array
+     */
+    private $roles;
+
+    /**
+     * UserDTO constructor.
+     *
+     * @param User $user
+     */
     public function __construct(User $user)
     {
         $this->username = $user->getUsername();
         $this->email = $user->getEmail();
         $this->createdAt = $user->getCreatedAt();
+        $this->roles = $user->getRoles();
 
         $this->firstName = $user->getAccount()->getFirstName();
         $this->lastName = $user->getAccount()->getLastName();
@@ -151,5 +162,10 @@ class UserDTO
     public function getAboutMe(): string
     {
         return $this->aboutMe;
+    }
+
+    public function getRoles(): array
+    {
+        return $this->roles;
     }
 }
