@@ -62,13 +62,13 @@ class PermissionService
     }
 
     /**
-     * @param Permission $permission
+     * @param string $permission
      *
      * @return bool|null
      */
-    public function deletePermission(Permission $permission): ?bool
+    public function deletePermission(string $permission): ?bool
     {
-        $name = $this->stringConverter->setUppercase($permission->getName());
+        $name = $this->stringConverter->setUppercase($permission);
         $name = $this->stringConverter->addPrefix($name, "ROLE_");
 
         $permissionRepository = $this->permissionRepository->findBy(['name' => $name])[0];

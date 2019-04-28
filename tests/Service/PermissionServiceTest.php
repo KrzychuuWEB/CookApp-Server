@@ -125,7 +125,7 @@ class PermissionServiceTest extends TestCase
             ->expects($this->once())
             ->method('flush');
 
-        $result = $this->permissionService->deletePermission($permission);
+        $result = $this->permissionService->deletePermission("ROLE_EXAMPLE");
 
         $this->assertTrue($result);
     }
@@ -159,7 +159,7 @@ class PermissionServiceTest extends TestCase
             ])
             ->willReturn([$permission]);
 
-        $result = $this->permissionService->deletePermission($permission);
+        $result = $this->permissionService->deletePermission("ROLE_EXAMPLE");
 
         $this->assertFalse($result);
     }
@@ -174,7 +174,7 @@ class PermissionServiceTest extends TestCase
             ->method('findBy')
             ->willReturn(null);
 
-        $result = $this->permissionService->deletePermission($permission);
+        $result = $this->permissionService->deletePermission("Example");
 
         $this->assertNull($result);
     }

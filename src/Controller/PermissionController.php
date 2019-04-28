@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Entity\Permission;
 use App\Form\PermissionDeleteType;
 use App\Form\PermissionType;
 use App\Form\PermissionUpdateType;
@@ -16,10 +15,14 @@ use App\Service\UserService;
 use Doctrine\ORM\NonUniqueResultException;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
+/**
+ * @Security("is_granted('ROLE_MANAGEMENT')", statusCode=403)
+ */
 class PermissionController extends AbstractFOSRestController
 {
     /**
@@ -99,40 +102,28 @@ class PermissionController extends AbstractFOSRestController
     }
 
     /**
-     * @Rest\Delete("/permissions", name="permission_delete")
+     * @Rest\Delete("/permissions/{permission}", name="permission_delete")
      *
-     * @param Request $request
+     * @param string $permission
      *
      * @return Response
      */
-    public function delete(Request $request): Response
+    public function delete(string $permission): Response
     {
-        $form = $this->createForm(PermissionDeleteType::class, null);
-        $form->submit($request->request->all());
+        $result = $this->permissionService->deletePermission($permission);
 
-        if ($form->isValid()) {
-            $data = $form->getData();
-
-            $result = $this->permissionService->deletePermission($data);
-
-            if ($result) {
-                return $this->json([
-                    'success' => $this->translator->trans('permission_delete'),
-                ], Response::HTTP_OK);
-            } elseif ($result === null) {
-                return $this->json([
-                    'error' => $this->translator->trans('permission_not_found'),
-                ], Response::HTTP_NOT_FOUND);
-            }
-
+        if ($result) {
             return $this->json([
-                'success' => $this->translator->trans('permission_delete_has_users'),
-            ], Response::HTTP_BAD_REQUEST);
+                'success' => $this->translator->trans('permission_delete'),
+            ], Response::HTTP_OK);
+        } elseif ($result === null) {
+            return $this->json([
+                'error' => $this->translator->trans('permission_not_found'),
+            ], Response::HTTP_NOT_FOUND);
         }
 
         return $this->json([
-            'error' => $this->translator->trans('form_is_not_valid'),
-            'fields' => $this->formErrorsConverter->convertErrorsFromFrom($form),
+            'success' => $this->translator->trans('permission_delete_has_users'),
         ], Response::HTTP_BAD_REQUEST);
     }
 
