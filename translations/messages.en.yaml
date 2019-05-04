@@ -21,3 +21,27 @@ permission_delete: The permission has been deleted
 permission_created: The permission has been created
 permission_delete_has_users: The permission is not delete, because the users has been this permission
 permission_update: The permission has been updated
+
+# RecipeController
+recipe_not_found: The recipe is not found
+recipe_created: The recipe has been created
+recipe_updated: The recipe has been updated
+recipe_deleted: The recipe has been deleted
+
+# IngredientsController
+ingredients_not_found: The ingredient is not found
+ingredients_created: The ingredient has been created
+ingredients_updated: The ingredient has been updated
+ingredients_deleted: The ingredient has been deleted
+
+# StepsController
+steps_not_found: The step is not found
+steps_created: The step has been created
+steps_updated: The step has been updated
+steps_deleted: The step has been deleted
+
+# RecipePhotosController
+recipephotos_not_found: The photo is not found
+recipephotos_created: The photo has been created
+recipephotos_updated: The photo has been updated
+recipephotos_deleted: The photo has been deleted

@@ -32,3 +32,53 @@ App\Entity\Permission:
       - NotBlank: ~
       - App\Validator\Constraints\ConstraintsPermissionUnique: { groups: [create], message: permission.name.unique }
       - App\Validator\Constraints\ConstraintsPermissionNotFound: { groups: [delete], message: permission.not.found }
+
+App\Entity\Recipe:
+  properties:
+    name:
+      - NotBlank: { groups: [create_recipe] }
+      - Length: { min: 3, max: 120, groups: [create_recipe] }
+    description:
+      - NotBlank: { groups: [create_recipe] }
+      - Length: { min: 1, groups: [create_recipe] }
+    level:
+      - NotBlank: { groups: [create_recipe] }
+    time:
+      - NotBlank: { groups: [create_recipe] }
+    ingredients:
+      - Valid: ~
+    steps:
+      - Valid: ~
+
+App\Entity\Steps:
+  properties:
+    name:
+      - NotBlank: ~
+      - Length:
+          min: 3
+          max: 150
+    description:
+      - NotBlank: ~
+      - Length:
+          min: 1
+          max: 1500
+    step:
+      - NotBlank: ~
+
+App\Entity\Ingredients:
+  properties:
+    name:
+      - NotBlank: ~
+      - Length:
+          min: 3
+          max: 80
+    value:
+      - NotBlank: ~
+      - Length:
+          min: 3
+          max: 25
+    unit:
+      - NotBlank: ~
+      - Length:
+          min: 3
+          max: 30

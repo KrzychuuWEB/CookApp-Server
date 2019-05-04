@@ -21,3 +21,27 @@ permission_delete: Uprawnienie zostało usunięte
 permission_created: Uprawnienie zostało dodane
 permission_delete_has_users: Nie możesz usunąć uprawnienia, ponieważ jakiś użytkownik posiada te uprawnienie
 permission_update: Uprawnienie zostało zaktualizowane
+
+# RecipeController
+recipe_not_found: Przepis nie został znaleziony
+recipe_created: Przepis został dodany
+recipe_updated: Przepis został zaktualizowany
+recipe_deleted: Przepis został usunięty
+
+# IngredientsController
+ingredients_not_found: Składnik nie został znaleziony
+ingredients_created: Składnik został dodany
+ingredients_updated: Składnik został zaktualizowny
+ingredients_deleted: Składnik został usunięty
+
+# StepsController
+steps_not_found: Krok nie został znaleziony
+steps_created: Krok został stworzony
+steps_updated: Krok został zaktualizowany
+steps_deleted: Ktok został usunięty
+
+# RecipePhotosController
+recipephotos_not_found: Zdjęcie nie zostało znalezione
+recipephotos_created: Zdjęcie zostało stworzone
+recipephotos_updated: Zdjęcie zostało zaktualizowane
+recipephotos_deleted: Zdjęcie zostało usunięte
