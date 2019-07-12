@@ -19,4 +19,4 @@ Branch develop - v1 => The version v0 extension and the creation of many more fu
 * [CRUD Permissions]
 * [CRUD Recipe]
 
-- All features apply version v0. I plans in the version v1 add more interesting features.
+All features apply version v0. I plans in the version v1 add more interesting features.
