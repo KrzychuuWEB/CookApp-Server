@@ -1,0 +1,5 @@
+App\Form\Model\UserFormModel:
+  properties:
+    username:
+      - NotBlank: { groups: [user_create] }
+      - Length: { min: 3, groups: [user_edit] }

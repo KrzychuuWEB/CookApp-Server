@@ -1,0 +1,85 @@
+version: "3.4"
+
+#networks:
+#  web:
+#    external: true
+#  internal:
+#    external: false
+
+services:
+  nginx:
+    container_name: cookapp-api-nginx
+    image: nginx:latest
+
+    # Dev
+    ports:
+      - "8000:80"
+
+    # Prod
+#    labels:
+#      - traefik.backend=nginx-test
+#      - traefik.enable=true
+#      - traefik.frontend.rule=Host:api.domain.pl
+#      - traefik.docker.network=web
+#      - traefik.port=80
+#    networks:
+#      - web
+#      - internal
+    volumes:
+      - .docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - ./:/var/www/html
+    restart: unless-stopped
+
+  php-fpm:
+    container_name: cookapp-api-php
+    build:
+      context: .
+      dockerfile: .docker/php/Dockerfile
+      target: php-${APP_ENV}
+    ports:
+      - "9000:9000"
+    volumes:
+      - ./:/var/www/html
+
+    # Dev
+#    labels:
+#      - traefik.enable=false
+#    networks:
+#      - internal
+    restart: unless-stopped
+
+  db:
+    container_name: cookapp-api-db
+    image: mysql:8
+    command: --default-authentication-plugin=mysql_native_password
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: cookapp
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+    volumes:
+      - .docker/data:/var/lib/mysql
+
+    # Dev
+#    labels:
+#      - traefik.enable=false
+#    networks:
+#      - internal
+    restart: unless-stopped
+
+  phpmyadmin:
+    container_name: cookapp-api-phpmyadmin
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - "8080:80"
+    environment:
+      PMA_HOST: db
+
+    # Dev
+#    labels:
+#      - traefik.enable=false
+#    networks:
+#      - internal
+    restart: unless-stopped
