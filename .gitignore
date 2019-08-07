@@ -1,6 +1,7 @@
 /.idea/
 <<<<<<< HEAD
-/docker/data/
+/.docker/data/
+/src/Migrations
 
 =======
 >>>>>>> a9a524d08a9887a59fc555c222bd3c1f4c2162bb
@@ -8,23 +9,17 @@
 /.env.local
 /.env.local.php
 /.env.*.local
-<<<<<<< HEAD
-=======
 /.env
 /.env.test
->>>>>>> a9a524d08a9887a59fc555c222bd3c1f4c2162bb
 /public/bundles/
 /var/
 /vendor/
 ###< symfony/framework-bundle ###
 
-<<<<<<< HEAD
-=======
 ###> symfony/web-server-bundle ###
 /.web-server-pid
 ###< symfony/web-server-bundle ###
 
->>>>>>> a9a524d08a9887a59fc555c222bd3c1f4c2162bb
 ###> symfony/phpunit-bridge ###
 .phpunit
 /phpunit.xml
