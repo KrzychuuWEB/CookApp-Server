@@ -1,10 +1,7 @@
 /.idea/
-<<<<<<< HEAD
 /.docker/data/
 /src/Migrations
 
-=======
->>>>>>> a9a524d08a9887a59fc555c222bd3c1f4c2162bb
 ###> symfony/framework-bundle ###
 /.env.local
 /.env.local.php

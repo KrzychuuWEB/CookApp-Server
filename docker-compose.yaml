@@ -34,12 +34,13 @@ services:
     container_name: cookapp-api-php
     build:
       context: .
-      dockerfile: .docker/php/Dockerfile
-      target: php-${APP_ENV}
+      dockerfile: .docker/php/${APP_ENV}/Dockerfile
     ports:
       - "9000:9000"
     volumes:
       - ./:/var/www/html
+    env_file:
+      - .env
 
     # Dev
 #    labels:
