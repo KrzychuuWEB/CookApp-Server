@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Entity\User;
 use App\Factory\UserFactory;
 use App\Form\Model\UserFormModel;
 use Doctrine\ORM\EntityManagerInterface;
@@ -16,16 +15,17 @@ class CreateUser
      */
     private $entityManager;
 
+    private $userFactory;
 
-    public function __construct(EntityManagerInterface $entity)
+    public function __construct(EntityManagerInterface $entity, UserFactory $userFactory)
     {
         $this->entityManager = $entity;
+        $this->userFactory = $userFactory;
     }
 
     public function create(UserFormModel $userFormModel): void
     {
-        $factory = new UserFactory();
-        $user = $factory->create($userFormModel);
+        $user = $this->userFactory->create($userFormModel);
 
         $this->entityManager->persist($user);
         $this->entityManager->flush();

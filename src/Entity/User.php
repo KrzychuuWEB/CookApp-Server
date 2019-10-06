@@ -3,11 +3,12 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  */
-class User
+class User implements UserInterface, \Serializable
 {
     /**
      * @ORM\Id()
@@ -88,4 +89,44 @@ class User
 
         return $this;
     }
+
+    public function eraseCredentials()
+    {
+    }
+
+    /** @see \Serializable::serialize() */
+    public function serialize()
+    {
+        return serialize(array(
+            $this->id,
+            $this->username,
+            $this->password,
+        ));
+    }
+    /** @see \Serializable::unserialize()
+     * @param $serialized
+     */
+    public function unserialize($serialized)
+    {
+        list (
+            $this->id,
+            $this->username,
+            $this->password,
+            ) = unserialize($serialized, array('allowed_classes' => false));
+    }
+
+    public function getSalt()
+    {
+        return null;
+    }
+    public function getRoles()
+    {
+        $roles = ['ROLE_USER'];
+//        $permissions = $this->getPermissions();
+//        foreach ($permissions as $permission) {
+//            $roles[] = $permission->getName();
+//        }
+        return $roles;
+    }
+
 }

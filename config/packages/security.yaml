@@ -8,8 +8,8 @@ security:
     providers:
         db_users:
             entity:
-                class: 'App\Entity\User'
-                property: 'username'
+                class: App\Entity\User
+                property: username
 
     firewalls:
         dev:
