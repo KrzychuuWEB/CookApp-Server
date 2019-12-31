@@ -11,6 +11,7 @@ use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 /**
  * Class UserController
@@ -50,5 +51,19 @@ class UserController extends AbstractApiController
         return $this->createRestResponse([
             'error' => $this->getErrorsFromForm($form),
         ], Response::HTTP_BAD_REQUEST);
+    }
+
+    /**
+     * @Rest\Get("/testroute", name="user_test")
+     *
+     * @IsGranted("ROLE_USER")
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function testRoute(): Response
+    {
+        return $this->createRestResponse([
+            'message' => 'ECookHub'
+        ], Response::HTTP_OK);
     }
 }

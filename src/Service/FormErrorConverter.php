@@ -19,7 +19,7 @@ class FormErrorConverter
         foreach ($form->all() as $childForm) {
             if ($childForm instanceof FormInterface) {
                 if ($childErrors = $this->convertFormErrorToArray($childForm)) {
-                    $errors[$childForm->getName()] = $childErrors;
+                    $errors[$childForm->getName()] = $childErrors[0];
                 }
             }
         }

@@ -9,7 +9,7 @@ security:
         db_users:
             entity:
                 class: App\Entity\User
-                property: username
+                property: email
 
     firewalls:
         dev:
@@ -25,10 +25,12 @@ security:
             pattern: ^/v1/login
             stateless: true
             anonymous: true
+            user_checker: App\Security\UserChecker
             json_login:
                 check_path: /v1/login_check
                 success_handler: lexik_jwt_authentication.handler.authentication_success
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
+                username_path: email
 
         api:
             pattern: ^/v1
