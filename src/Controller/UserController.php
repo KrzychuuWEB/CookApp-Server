@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Form\Type\UserCreateType;
-use App\Service\CreateUser;
+use App\Service\CreateUserService;
 use App\Service\FormErrorConverter;
 use FOS\RestBundle\Controller\Annotations as Rest;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -21,7 +22,7 @@ class UserController extends AbstractApiController
 {
     private $createUser;
 
-    public function __construct(TranslatorInterface $translator, FormErrorConverter $converter, CreateUser $createUser)
+    public function __construct(TranslatorInterface $translator, FormErrorConverter $converter, CreateUserService $createUser)
     {
         parent::__construct($translator, $converter);
 
@@ -29,10 +30,12 @@ class UserController extends AbstractApiController
     }
 
     /**
-     * @Rest\Post("/users", name="user_create")
+     * @Rest\Post("/users", name="create_user")
      *
      * @param Request $request
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function createUser(Request $request): Response
     {
@@ -41,29 +44,11 @@ class UserController extends AbstractApiController
 
         if ($form->isValid()) {
             $data = $form->getData();
-            $this->createUser->create($data);
+            $this->createUser->createUser($data);
 
-            return $this->createRestResponse([
-                'success' => $this->getTranslate('user_create'),
-            ], 200);
+            return $this->createRestResponse(true, null, $this->getTranslate('user_create'), Response::HTTP_OK);
         }
 
-        return $this->createRestResponse([
-            'error' => $this->getErrorsFromForm($form),
-        ], Response::HTTP_BAD_REQUEST);
-    }
-
-    /**
-     * @Rest\Get("/testroute", name="user_test")
-     *
-     * @IsGranted("ROLE_USER")
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function testRoute(): Response
-    {
-        return $this->createRestResponse([
-            'message' => 'ECookHub'
-        ], Response::HTTP_OK);
+        return $this->createRestResponse(false, $this->getErrorsFromForm($form), null, Response::HTTP_BAD_REQUEST);
     }
 }

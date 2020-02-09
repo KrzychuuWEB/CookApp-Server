@@ -33,15 +33,14 @@ abstract class AbstractApiController extends AbstractFOSRestController
         $this->formErrorConverter = $converter;
     }
 
-    /**
-     * @param array $data
-     * @param int $status
-     * @param array $groups
-     * @return Response
-     */
-    public function createRestResponse(array $data, int $status = Response::HTTP_OK, array $groups = []): Response
+
+    public function createRestResponse(bool $success, ?array $data, ?string $message, int $status = Response::HTTP_OK, array $groups = []): Response
     {
-        return $this->json($data, $status);
+        return $this->json([
+            "status" => $success ? "success" : "error",
+            "data" => $data,
+            "message" => $message
+        ], $status);
     }
 
     /**
